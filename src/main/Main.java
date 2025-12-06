@@ -15,5 +15,7 @@ public class Main {
 
         window.setLocationRelativeTo(null); //sentrerer den
         window.setVisible(true);
+
+        gamePanel.startGameThread();
     }
 }
