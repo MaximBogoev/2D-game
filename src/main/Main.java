@@ -7,7 +7,7 @@ public class Main {
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //så man kan x-e ut av window
         window.setResizable(false); //maybe true hvis jeg finner på noe
-        window.setTitle("Gaaaame but no Gaaaame Engine");
+        window.setTitle("Meee and my monkey!");
 
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);

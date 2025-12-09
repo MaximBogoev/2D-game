@@ -1,15 +1,17 @@
 package main;
+import entities.Player;
+
 import javax.swing.*;
 import java.awt.*;
-import java.security.Key;
 
 // Game Panel blir subclass til JPanel
 public class GamePanel extends JPanel implements Runnable{ //runnable så man kan bruke Thread
     //Screen settings:
     final int originalTileSize = 16; // alt i spillet skal være 16x16, retro
     final int scale = 3; // 16x16 på 1920x1080 skjerm er smått så scale 16x3
+    public final int tileSize = originalTileSize * scale;
 
-    final int tileSize = originalTileSize * scale;
+    // tile grid
     final int maxScreenCol = 16;
     final int maxScreenRow = 12; //4*3 ratio
 
@@ -21,15 +23,11 @@ public class GamePanel extends JPanel implements Runnable{ //runnable så man ka
 
     KeyHandler keyH = new KeyHandler();
     Thread gameThread; // Time in game
-
-    // set Players default position
-    int playerX = 100;
-    int playerY = 100;
-    int playerSpeed = 4;
+    Player player = new Player(this,keyH);
 
     public GamePanel(){ //constructor
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
-        this.setBackground(Color.darkGray);
+        this.setBackground(Color.gray);
         this.setDoubleBuffered(true); //bedre rendering
         this.addKeyListener(keyH);
         this.setFocusable(true); //focused to receive key inputs
@@ -67,18 +65,7 @@ public class GamePanel extends JPanel implements Runnable{ //runnable så man ka
             }
     }
     public void update(){
-        if (keyH.upPressed){
-            playerY -= playerSpeed;
-        }
-        else if (keyH.downPressed){
-            playerY += playerSpeed;
-        }
-        else if (keyH.leftPressed){
-            playerX-= playerSpeed;
-        }
-        else if (keyH.rightPressed){
-            playerX+= playerSpeed;
-        }
+        player.update();
     }
     public void paintComponent(Graphics g){ //repaint
 
@@ -86,9 +73,7 @@ public class GamePanel extends JPanel implements Runnable{ //runnable så man ka
 
         Graphics2D g2 = (Graphics2D)g; // Graphics2D har flere functions enn den vanlige
 
-        g2.setColor(Color.WHITE);
-
-        g2.fillRect(playerX, playerY, tileSize, tileSize);
+        player.draw(g2);
 
         g2.dispose(); // sier til systemer å slutte å bruke den når den er ferdig, bedre performance
     }
