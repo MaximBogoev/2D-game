@@ -1,5 +1,6 @@
 package main;
 import entities.Player;
+import tiles.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,15 +13,15 @@ public class GamePanel extends JPanel implements Runnable{ //runnable så man ka
     public final int tileSize = originalTileSize * scale;
 
     // tile grid
-    final int maxScreenCol = 16;
-    final int maxScreenRow = 12; //4*3 ratio
-
-    final int screenWidth = tileSize * maxScreenCol;
-    final int screenHeight = tileSize * maxScreenRow;
+    public final int maxScreenCol = 16;
+    public final int maxScreenRow = 12; //4*3 ratio
+    public final int screenWidth = tileSize * maxScreenCol;
+    public final int screenHeight = tileSize * maxScreenRow;
 
     //FPS
     int FPS = 60;
 
+    TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
     Thread gameThread; // Time in game
     Player player = new Player(this,keyH);
@@ -55,7 +56,7 @@ public class GamePanel extends JPanel implements Runnable{ //runnable så man ka
                     remainingTime = remainingTime / 1000000; // nano til milisekunder
                     if (remainingTime<0) remainingTime = 0;
 
-                    Thread.sleep((long) remainingTime);
+                    Thread.sleep((long) remainingTime); //dette er ikke busy wait så ignorer warningen
 
                     nextDrawTime += drawInterval;
 
@@ -72,6 +73,8 @@ public class GamePanel extends JPanel implements Runnable{ //runnable så man ka
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D)g; // Graphics2D har flere functions enn den vanlige
+
+        tileM.draw(g2); // tegne tile først så player kommer opp på og ikke under tiles
 
         player.draw(g2);
 
