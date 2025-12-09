@@ -58,15 +58,15 @@ public class Player extends Entity{
             x += speed;
         }
         spriteCounter++;
-        if (spriteCounter > 10){
+        if (spriteCounter > 12){
             if(spriteNum == 1){
                 spriteNum = 2;
             }
             else if (spriteNum == 2){
                 spriteNum = 1;
             }
+            spriteCounter = 0;
         }
-        spriteCounter = 0;
     }
     public void draw(Graphics2D g2){
 
