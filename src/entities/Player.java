@@ -22,6 +22,8 @@ public class Player extends Entity{
 
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
+
+        hitbox = new Rectangle(9,36,30,9);
         setDefaultValues();
         getPlayerImage();
     }
@@ -50,20 +52,30 @@ public class Player extends Entity{
         if(keyH.upPressed ||  keyH.downPressed || keyH.leftPressed || keyH.rightPressed){
             if (keyH.upPressed){
                 direction = "up";
-                worldY -= speed;
             }
             else if (keyH.downPressed){
                 direction = "down";
-                worldY += speed;
             }
             else if (keyH.leftPressed){
                 direction = "left";
-                worldX -= speed;
             }
             else if (keyH.rightPressed){
                 direction = "right";
-                worldX += speed;
             }
+            //sjekk om vi collider med noe tiles
+            colliding = false;
+            gp.cChecker.checkTile(this);
+
+            //hvis colliding er false så kan vi bevege oss
+            if (!colliding){
+                switch (direction){
+                    case "up": worldY -= speed; break;
+                    case "down": worldY += speed; break;
+                    case "left": worldX -= speed; break;
+                    case "right": worldX += speed; break;
+                }
+            }
+
             spriteCounter++;
             if (spriteCounter > 12){ //hver 12-te frame ut av 60 (fps) så bytter vi frames
                 if(spriteNum == 1){
