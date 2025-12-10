@@ -7,16 +7,22 @@ import java.awt.*;
 
 // Game Panel blir subclass til JPanel
 public class GamePanel extends JPanel implements Runnable{ //runnable så man kan bruke Thread
-    //Screen settings:
+    //Screen Settings:
     final int originalTileSize = 16; // alt i spillet skal være 16x16, retro
     final int scale = 3; // 16x16 på 1920x1080 skjerm er smått så scale 16x3
     public final int tileSize = originalTileSize * scale;
 
-    // tile grid
+    // Tile Grid
     public final int maxScreenCol = 16;
     public final int maxScreenRow = 12; //4*3 ratio
     public final int screenWidth = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
+
+    // World Settings
+    public final int maxWorldCol = 50;
+    public final int maxWorldRow = 50;
+    public final int worldWidth = tileSize * maxWorldCol;
+    public final int worldHeight = tileSize * maxWorldRow;
 
     //FPS
     int FPS = 60;
@@ -24,11 +30,11 @@ public class GamePanel extends JPanel implements Runnable{ //runnable så man ka
     TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
     Thread gameThread; // Time in game
-    Player player = new Player(this,keyH);
+    public Player player = new Player(this,keyH);
 
     public GamePanel(){ //constructor
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
-        this.setBackground(Color.gray);
+        this.setBackground(Color.black);
         this.setDoubleBuffered(true); //bedre rendering
         this.addKeyListener(keyH);
         this.setFocusable(true); //focused to receive key inputs

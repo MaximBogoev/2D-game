@@ -17,7 +17,7 @@ public class TileManager {
         this.gp = gp;
 
         tile = new Tile[10]; // antall tiles
-        mapTileNum = new int [gp.maxScreenCol] [gp.maxScreenRow];
+        mapTileNum = new int [gp.maxWorldCol] [gp.maxWorldRow];
         getTileImage();
         loadMap("maps/map01.txt");
     }
@@ -46,17 +46,17 @@ public class TileManager {
             int col = 0;
             int row = 0;
             //scan map.txt linje etter linje
-            while (col < gp.maxScreenCol && row < gp.maxScreenRow){
+            while (col < gp.maxWorldCol && row < gp.maxWorldRow){
                 String line = br.readLine();
 
-                while (col < gp.maxScreenCol){
+                while (col < gp.maxWorldCol){
                     String[] numberString = line.split(" "); //splitter der den ser mellomrom, som i map txt imellom hver tile nummer
                     int numbers  = Integer.parseInt(numberString[col]); // gjør om lest String til int
 
                     mapTileNum[col] [row] = numbers;
                     col++;
                 }
-                if (col == gp.maxScreenCol){
+                if (col == gp.maxWorldCol){
                     row++;
                     col = 0;
                 }
@@ -69,22 +69,30 @@ public class TileManager {
     }
     public void draw(Graphics2D g2) {
 
-        int col = 0;
-        int row = 0;
-        int x = 0;
-        int y = 0;
+        int worldCol = 0;
+        int worldRow = 0;
 
-        while(col < gp.maxScreenCol && row < gp.maxScreenRow){
+        while(worldCol < gp.maxWorldCol && worldRow < gp.maxWorldRow){
 
-            int tileNum = mapTileNum[col][row];
-            g2.drawImage(tile[tileNum].image, x, y, gp.tileSize, gp.tileSize,null);
-            col++;
-            x += gp.tileSize;
-            if(col == gp.maxScreenCol){
-                row++;
-                y += gp.tileSize;
-                col = 0;
-                x = 0;
+            int tileNum = mapTileNum[worldCol][worldRow];
+            // worldX,Y er hvor tile er på mappet, screenX,Y er hvor det skal bli tegnet på skjermen
+            int worldX = worldCol * gp.tileSize;
+            int worldY = worldRow * gp.tileSize;
+            int screenX = worldX - gp.player.worldX + gp.player.screenX;
+            int screenY = worldY - gp.player.worldY + gp.player.screenY;
+// if statement som sjekker at tile er innenfor player view, hvis ja, kun da draw it.
+            if(worldX + gp.tileSize > gp.player.worldX - gp.player.screenX &&
+               worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
+               worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
+               worldY - gp.tileSize < gp.player.worldY + gp.player.screenY){
+
+                g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize,null);
+            }// vi går fra å tegne 50*50 (map size) som er 2500 tiles hver frame,
+            // ned til 16*12 det innenfor skjermen, 192, mye bedre for performance
+            worldCol++;
+            if(worldCol == gp.maxWorldCol){
+                worldCol = 0;
+                worldRow++;
             }
         }
     }
