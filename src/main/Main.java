@@ -7,7 +7,7 @@ public class Main {
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //så man kan x-e ut av window
         window.setResizable(false);
-        window.setTitle("Meee and my monkey!");
+        window.setTitle("Monke banna Rise [35 MYA]"); // 35 million years ago the monkeys rised to power
 
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
